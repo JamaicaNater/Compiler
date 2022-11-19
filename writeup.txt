@@ -1,0 +1,18 @@
+1. Alex Cummins CS4318 (jac822) , Francis Williams CS4318 (faw13), Course ID: CS4318
+
+2. We plan to meet a few times each week to work on the project. Ideally we will meet in Alkek but when it floods we will have to meet in LBJ.
+
+3. Both team memer worked collborativly on the the Assemble functions
+
+4. We tested our code in two ways. By making our own extensive test cases and using MARS to trace the values through the funtion
+
+5. the program was debugged using GDB and Mars version 4.5. Run the assembly code you can copy the assembly code in to mars (not spim) and run it. 
+alternativly if you are using the provided makefile you can type "make compile"
+
+Note: all funtions must have a return including voids
+
+Bugs: you cant assign and declare in one step
+	you cant pass array vals to funtions
+
+6. When fuctions are called thier arguments are stored in memory then the function moves its stackpointer to just after the last argument passed.
+The funtion then reads these in  and uses them as needed. Thus the fuction accepts any number of arguments.
