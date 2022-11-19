@@ -6,6 +6,10 @@
 
 extern int yylineno;
 
+
+/* The symbolTable, which will be implemented as a hash table. */
+struct strEntry strTable[MAXIDS];
+
 // hash function for the symbol table
 unsigned long hash(unsigned char *str)
 {

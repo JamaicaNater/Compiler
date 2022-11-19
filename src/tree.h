@@ -31,8 +31,6 @@ struct treenode {
     tree *children[MAXCHILDREN];
 };
 
-tree *ast; /* pointer to AST root */
-
 /* builds sub tree with zeor children  */
 tree *maketree(int kind);
 

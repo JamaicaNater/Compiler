@@ -7,6 +7,9 @@
 #include<../obj/y.tab.h>
 
 extern int yylineno;
+extern tree * ast;
+extern struct strEntry strTable[MAXIDS];
+
 int yylex();
 
 int scopeLevel = 0; // 0 if global, 1 if local

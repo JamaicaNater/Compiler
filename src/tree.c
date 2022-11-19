@@ -7,8 +7,12 @@
 
 #define MAX_EXTERNS 15
 
+tree * ast;
+
 extern int yylineno;
 extern int yyerror(char * msg);
+extern struct strEntry strTable[MAXIDS];
+
 char asm_scope[20];
 
 char extern_fuctions[MAX_EXTERNS][256] = {  "initoutput:\n"

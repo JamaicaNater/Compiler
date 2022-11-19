@@ -6,9 +6,8 @@
 
 extern int errors;
 extern int yyparse();
-
 extern FILE* yyin;
-extern tree* ast;
+extern tree * ast;
 
 void printhelp(){
     printf("Usage: mcc [--ast] [--sym] [-h|--help] FILE\n");

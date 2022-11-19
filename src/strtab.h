@@ -18,8 +18,6 @@ struct strEntry{
 };
 
 
-/* The symbolTable, which will be implemented as a hash table. */
-struct strEntry strTable[MAXIDS];
 //int num_entries = 0;
 
 unsigned long hash(unsigned char *str);
