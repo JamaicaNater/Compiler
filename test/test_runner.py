@@ -57,7 +57,8 @@ def main():
         print("Tests passed successfully.")
         sys.exit(0)
     else:
-        print("Error: Tests failed.")
+        failure_block = "\n".join("FAILURE: " + test_case for test_case in failed_test_cases)
+        print(f'Error: Some Tests failed:\n{failure_block}.')
         sys.exit(1)
 
 if __name__ == "__main__":
