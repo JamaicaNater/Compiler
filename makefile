@@ -39,16 +39,32 @@ obj:
 clean:
 	@rm -rf obj
 	@rm -f lex.yy.* *.o *~ scanner
-	@rm asm.asm
+	@rm -f *.asm
 
 test: obj/mcc
 	@python ./test/testParser.py
 
-compile:
-	./obj/mcc $(INPUT_FILE)
+
+CHECK_INPUT_FILE := $(if $(INPUT_FILE),$(INPUT_FILE),test/cases/asmTest2.mC)
+CHECK_OUTPUT_FILE := $(if $(OUTPUT_FILE),$(OUTPUT_FILE),asm.asm)
+
+compile: obj/mcc
+	@echo "Checking for INPUT_FILE and OUTPUT_FILE..."
+	@if [ -z "$(INPUT_FILE)" ]; then \
+		echo "INPUT_FILE not set, defaulting to 'test/cases/asmTest2.mC'"; \
+	fi
+	@if [ -z "$(OUTPUT_FILE)" ]; then \
+		echo "OUTPUT_FILE not set, defaulting to 'asm.asm'"; \
+	fi
+	./obj/mcc $(CHECK_INPUT_FILE) $(CHECK_OUTPUT_FILE)
+
 
 run-code:
-	java -jar Mars4_5.jar 10000 asm.asm
+	@echo "Checking for OUTPUT_FILE..."
+	@if [ -z "$(OUTPUT_FILE)" ]; then \
+		echo "OUTPUT_FILE not set, defaulting to 'asm.asm'"; \
+	fi
+	java -jar Mars4_5.jar 10000 $(CHECK_OUTPUT_FILE)
 
 lint:
 	~/.local/bin/cpplint src/driver.c src/tree.c src/tree.h src/strtab.c src/strtab.h

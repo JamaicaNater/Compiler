@@ -9,6 +9,8 @@
 
 tree * ast;
 
+extern char * output_file_name;
+
 extern int yylineno;
 extern int yyerror(char * msg);
 extern struct strEntry strTable[MAXIDS];
@@ -16,57 +18,58 @@ extern struct strEntry strTable[MAXIDS];
 char asm_scope[20];
 
 char extern_fuctions[MAX_EXTERNS][256] = {  "initoutput:\n"
-                                            "\taddi $sp, $sp, -36\n"
-                                            "\tlw $a0, 0($sp)\n"
-                                            "\tli $v0, 1\n"
-                                            "\tsyscall\n"
-                                            "\taddi $sp, $sp, 36\n"
-                                            "\tjr $ra\n",
-                                            
-                                            "initoutputchar:\n"
-                                            "\taddi $sp, $sp, -36\n"
-                                            "\tlw $a0, 0($sp)\n"
-                                            "\tli $v0, 11\n"
-                                            "\tsyscall\n"
-                                            "\taddi $sp, $sp, 36\n"
-                                            "\tjr $ra\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tlw $a0, 0($sp)\n"
+    "\tli $v0, 1\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n",
+    
+    "initoutputchar:\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tlw $a0, 0($sp)\n"
+    "\tli $v0, 11\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n"
 
-                                            "initoutputhexaschar:\n"
-                                            "\taddi $sp, $sp, -36\n"
-                                            "\tlw $a0, 0($sp)\n"
-                                            "\tli $v0, 11\n"
-                                            "\tsyscall\n"
-                                            "\taddi $sp, $sp, 36\n"
-                                            "\tjr $ra\n" ,
+    "initoutputhexaschar:\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tlw $a0, 0($sp)\n"
+    "\tli $v0, 11\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n" ,
 
-                                            "initinputchar:\n"
-                                            "\taddi $sp, $sp, -36\n"
-                                            "\tli $v0, 12\n"
-                                            "\tsyscall\n"
-                                            "\taddi $sp, $sp, 36\n"
-                                            "\tjr $ra\n",
+    "initinputchar:\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tli $v0, 12\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n",
 
-                                            "initinputint:\n"
-                                            "\taddi $sp, $sp, -36\n"
-                                            "\tli $v0, 5\n"
-                                            "\tsyscall\n"
-                                            "\taddi $sp, $sp, 36\n"
-                                            "\tjr $ra\n"                                         
-                                            };
+    "initinputint:\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tli $v0, 5\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n"                                         
+};
 
 FILE * fileptr = NULL;
 
-char *node_names[70] = {"program", "declList", "decl", "varDecl", "localVarDecl", "typeSpecifier",
-                      "funDecl", "formalDeclList", "formalDecl", "funBody",
-                      "localDeclList", "statementList", "statement", "compoundStmt",
-                      "assignStmt", "condStmt", "loopStmt", "returnStmt", "var",
-                      "expression", "relop", "addExpr", "addop", "term", "mulop",
-                      "factor", "funcCallExpr", "argList", "identifier",
-                      "scalar", "array", "function", "if", "else", "integer", "character", 
-					  "string", "+", "-", "*", "/", "<=", "<", ">", ">=", "==", "!=", "int", "char", "void", "array size"};
+char *node_names[70] = {
+    "program", "declList", "decl", "varDecl", "localVarDecl", "typeSpecifier", "funDecl", "formalDeclList", "formalDecl", "funBody",
+    "localDeclList", "statementList", "statement", "compoundStmt", "assignStmt", "condStmt", "loopStmt", "returnStmt", "var",
+    "expression", "relop", "addExpr", "addop", "term", "mulop", "factor", "funcCallExpr", "argList", "identifier",
+    "scalar", "array", "function", "if", "else", "integer", "character", 
+    "string", "+", "-", "*", "/", "<=", "<", ">", ">=", "==", "!=", "int", "char", "void", "array size"
+};
 
-char * reg_names[32] = {"$zero", "$at", "$v0", "$v1", "$a0", "$a1", "$a2", "$a3", "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7", 
-                        "$s0", "$s1", "$s2", "$s3", "$s4", "$s5", "$s6", "$s7", "$t8", "$t9", "$k0", "$k1", "$gp", "$sp", "$fp", "$ra"};
+char * reg_names[32] = {
+    "$zero", "$at", "$v0", "$v1", "$a0", "$a1", "$a2", "$a3", "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7", 
+    "$s0", "$s1", "$s2", "$s3", "$s4", "$s5", "$s6", "$s7", "$t8", "$t9", "$k0", "$k1", "$gp", "$sp", "$fp", "$ra"
+};
 
 struct reg_val reg_map[32] = {[0 ... 28] = {-1,0}, [29 ... 31] = {0,0}};
 
@@ -177,7 +180,7 @@ void print_ast(tree *node, int nestLevel){
 */
 void assemble(tree * node, int * reg_no) {
     if (fileptr == NULL) {
-        fileptr = fopen("asm.asm", "w");
+        fileptr = fopen(output_file_name, "w");
         fprintf(fileptr,    ".text\n"
                             "\tmove $fp, $sp\n"
                             "\tJAL initmain\n"
