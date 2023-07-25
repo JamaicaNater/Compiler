@@ -45,4 +45,10 @@ test: obj/mcc
 	@python ./test/testParser.py
 
 compile:
+	./obj/mcc $(INPUT_FILE)
+
+run-code:
 	java -jar Mars4_5.jar 10000 asm.asm
+
+lint:
+	~/.local/bin/cpplint src/driver.c src/tree.c src/tree.h src/strtab.c src/strtab.h

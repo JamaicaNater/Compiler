@@ -1,0 +1,20 @@
+# Compiled object files
+*.o
+
+# Yacc + Lex output
+lex.yy.c 
+y.tab
+
+# Executables
+*.exe
+*.out
+
+# macOS specific files
+.DS_Store
+
+# Visual Studio Code specific files
+.vscode/
+
+# Build directories
+build/
+bin/
