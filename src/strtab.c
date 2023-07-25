@@ -2,13 +2,14 @@
 #include<stdlib.h>
 #include<string.h>
 #include"strtab.h"
+#include"globals.h"
 #include<assert.h>
 
 extern int yylineno;
 
 
 /* The symbolTable, which will be implemented as a hash table. */
-struct strEntry strTable[MAXIDS];
+struct strEntry strTable[MAX_SYMBOLS];
 
 // hash function for the symbol table
 unsigned long hash(unsigned char *str)
@@ -35,8 +36,8 @@ int ST_insert(char *id, char *scope, int data_type, int symbol_type, tree* treep
     //this goes through the symbol table to find the next empty spot to insert, implementation of linear probing
     int checks = 0;
     int flag = 0;
-    while (checks <= MAXIDS && flag == 0){
-        if (strlen(strTable[(index + checks) % MAXIDS].id) == 0) {
+    while (checks <= MAX_SYMBOLS && flag == 0){
+        if (strlen(strTable[(index + checks) % MAX_SYMBOLS].id) == 0) {
             index = index + checks;
             flag = 1;
         }
@@ -44,18 +45,18 @@ int ST_insert(char *id, char *scope, int data_type, int symbol_type, tree* treep
     }
     
     //this is where the symbol table slot is updated with the info passed to ST_insert
-    strcpy(strTable[index % MAXIDS].id, id);
-	strcpy(strTable[index % MAXIDS].scope, scope);
-	strTable[index % MAXIDS].symbol_type = symbol_type;
-	strTable[index % MAXIDS].data_type = data_type;
-    strTable[index % MAXIDS].treeptr = treeptr;
-    strTable[index % MAXIDS].calls = 0;
-    strTable[index % MAXIDS].reg = -1;
-    strTable[index % MAXIDS].mempos = -1;
+    strcpy(strTable[index % MAX_SYMBOLS].id, id);
+	strcpy(strTable[index % MAX_SYMBOLS].scope, scope);
+	strTable[index % MAX_SYMBOLS].symbol_type = symbol_type;
+	strTable[index % MAX_SYMBOLS].data_type = data_type;
+    strTable[index % MAX_SYMBOLS].treeptr = treeptr;
+    strTable[index % MAX_SYMBOLS].calls = 0;
+    strTable[index % MAX_SYMBOLS].reg = -1;
+    strTable[index % MAX_SYMBOLS].mempos = -1;
     
 
 	//this returns the index value for the symbol table to be stored in the syntax tree
-	int returnValue = index % MAXIDS;
+	int returnValue = index % MAX_SYMBOLS;
     return returnValue;
     
 }
@@ -69,10 +70,10 @@ int ST_lookup(char *id, char *scope) {
 
 	//this goes through the symbol table starting at the hashed value to see if there is anything there, and to see if it matches what was sent to the function
     int checks = 0;
-    while (strlen(strTable[(index + checks) % MAXIDS].id) != 0){
-        if (strcmp(strTable[(index + checks) % MAXIDS].id, id) == 0 && strcmp(strTable[(index + checks) % MAXIDS].scope, scope) == 0){
+    while (strlen(strTable[(index + checks) % MAX_SYMBOLS].id) != 0){
+        if (strcmp(strTable[(index + checks) % MAX_SYMBOLS].id, id) == 0 && strcmp(strTable[(index + checks) % MAX_SYMBOLS].scope, scope) == 0){
         	//if the value does exist we return it's index
-            return ((index + checks) % MAXIDS);
+            return ((index + checks) % MAX_SYMBOLS);
     	}
     	checks++;
     }
@@ -83,7 +84,7 @@ int ST_lookup(char *id, char *scope) {
     Prints everthing in the symbool table including funtion argumnets if applicable
 */
 void ST_print() {
-    for (int i = 0; i < MAXIDS; i++) {
+    for (int i = 0; i < MAX_SYMBOLS; i++) {
         if (strlen(strTable[i].id) == 0) {
             continue;
         }
@@ -153,8 +154,8 @@ int super_ST_lookup (char * id, char * scopeName) {
     return 1 for to many arguments passed
 */
 int function_compare (tree* original, tree* given) {
-    struct treenode * function_arguments[MAXCHILDREN];
-    struct treenode * passed_arguments[MAXCHILDREN];
+    struct treenode * function_arguments[TREENODE_MAX_CHILDREN];
+    struct treenode * passed_arguments[TREENODE_MAX_CHILDREN];
 
     int exclusions[1] = {ARRAYSIZE};
     int num_exclusions = 1;
@@ -222,7 +223,7 @@ void get_children_and_exclude(tree* childlist[], tree* node, int node_kind, int 
 
 int count_children(tree* node, int node_kind) {
     int index = 0;
-    struct treenode * children[MAXCHILDREN];
+    struct treenode * children[TREENODE_MAX_CHILDREN];
     get_children(children, node, node_kind, &index);
     return index;
 }
@@ -242,7 +243,7 @@ int is_array(tree* treeptr) {
     node = treeptr;
     
     int num_identifiers = 0;
-    struct treenode * ids[MAXCHILDREN];
+    struct treenode * ids[TREENODE_MAX_CHILDREN];
     get_children(ids, treeptr, IDENTIFIER, &num_identifiers);
     assert(num_identifiers <= 1);
 
@@ -251,7 +252,7 @@ int is_array(tree* treeptr) {
     }
 
     int count = 0;
-    struct treenode * children[MAXCHILDREN];
+    struct treenode * children[TREENODE_MAX_CHILDREN];
     get_children(children, node, ARRAYSIZE, &count);
     assert(count <= 1);
 
@@ -266,7 +267,7 @@ int is_array(tree* treeptr) {
     Given an arithmatic expresion this funtion returns the type of that expression
 */
 int get_type(tree * node) {
-    struct treenode * factors[MAXCHILDREN];
+    struct treenode * factors[TREENODE_MAX_CHILDREN];
     int count = 0;
     int expr_type = 0;
         

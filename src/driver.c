@@ -3,11 +3,13 @@
 #include<string.h>
 #include<../src/tree.h>
 #include<../src/strtab.h>
+#include<../src/globals.h>
 
 extern int errors;
 extern int yyparse();
 extern FILE* yyin;
-extern tree * ast;
+
+FILE * fileptr = NULL;
 
 char * output_file_name;
 

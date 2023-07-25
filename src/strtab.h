@@ -1,11 +1,12 @@
 #include "tree.h"
 #ifndef STRTAB_H
 #define STRTAB_H
-#define MAXIDS 1000
+
+#define MAX_SYMBOLS 1000
 
 /* This data structure describes each element of the symbol table. */
 
-// strEntry contains info on fucntion/ variable infomation in the form of the varible untility funtion
+// strEntry contains fucntion / variable infomation in the form of the variable utility funtion
 struct strEntry{
     char id[20];
     char scope[20];

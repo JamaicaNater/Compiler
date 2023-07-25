@@ -3,22 +3,75 @@
 #include<stdlib.h>
 #include<string.h>
 #include<../src/tree.h>
+#include<../src/globals.h>
 #include<../src/strtab.h>
 #include<../obj/y.tab.h>
 
 extern int yylineno;
-extern tree * ast;
-extern struct strEntry strTable[MAXIDS];
+extern struct strEntry strTable[MAX_SYMBOLS];
 
-int yylex();
-
+char asm_scope[20];
 int scopeLevel = 0; // 0 if global, 1 if local
 char scopeName[100] = "global"; //default scope
+
 tree *funDeclNode;
-int errors = 0;
+
+int globalptr = 0;
+int vars_declared = 0;
+int num_ifs = 0;
+int num_whiles = 0;
 
 char string_list[100][100];
 int curr_string = 0;
+
+int errors = 0;
+
+char extern_fuctions[MAX_EXTERN_FUNC][256] = {  "initoutput:\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tlw $a0, 0($sp)\n"
+    "\tli $v0, 1\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n",
+    
+    "initoutputchar:\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tlw $a0, 0($sp)\n"
+    "\tli $v0, 11\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n"
+
+    "initoutputhexaschar:\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tlw $a0, 0($sp)\n"
+    "\tli $v0, 11\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n" ,
+
+    "initinputchar:\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tli $v0, 12\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n",
+
+    "initinputint:\n"
+    "\taddi $sp, $sp, -36\n"
+    "\tli $v0, 5\n"
+    "\tsyscall\n"
+    "\taddi $sp, $sp, 36\n"
+    "\tjr $ra\n"                                         
+};
+
+char *node_names[70] = {
+    "program", "declList", "decl", "varDecl", "localVarDecl", "typeSpecifier", "funDecl", "formalDeclList", "formalDecl", "funBody",
+    "localDeclList", "statementList", "statement", "compoundStmt", "assignStmt", "condStmt", "loopStmt", "returnStmt", "var",
+    "expression", "relop", "addExpr", "addop", "term", "mulop", "factor", "funcCallExpr", "argList", "identifier",
+    "scalar", "array", "function", "if", "else", "integer", "character", 
+    "string", "+", "-", "*", "/", "<=", "<", ">", ">=", "==", "!=", "int", "char", "void", "array size"
+};
 
 %}
 
