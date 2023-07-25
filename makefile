@@ -70,4 +70,4 @@ execute:
 	java -jar Mars4_5.jar 10000 $(CHECK_OUTPUT_FILE)
 
 lint:
-	~/.local/bin/cpplint src/driver.c src/tree.c src/tree.h src/strtab.c src/strtab.h
+	~/.local/bin/cpplint --linelength=100 src/*
