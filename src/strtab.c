@@ -120,7 +120,7 @@ void ST_print() {
             if (i == 0 )
                 printf("Function Arguments \n");
 
-            printAst(function_args[i], 1);
+            print_ast(function_args[i], 1);
         }
 
         printf("id: %s, scope: %s, data type: %s, symbol type: %s\n", strTable[i].id, strTable[i].scope, data_type, symbol_type);
@@ -419,14 +419,14 @@ int make_function(int func_type, char * func_name, int arg_type, char * arg_name
     int varpos = ST_insert(arg_name, func_name, arg_type, SCALAR, NULL);
 
     int pos = ST_insert(func_name, "global", func_type, FUNCTION, NULL);
-    struct treenode * outputNode = maketree(FUNDECL);
-    addChild(outputNode, maketreeWithVal(TYPESPECIFIER, func_type));
-    addChild(outputNode, maketreeWithVal(IDENTIFIER, pos));
-    addChild(outputNode, maketree(FORMALDECLLIST));
+    struct treenode * outputNode = make_tree(FUNDECL);
+    add_child(outputNode, make_tree_with_val(TYPESPECIFIER, func_type));
+    add_child(outputNode, make_tree_with_val(IDENTIFIER, pos));
+    add_child(outputNode, make_tree(FORMALDECLLIST));
     if (arg_type != 0) {
-        addChild(outputNode->children[2], maketree(FORMALDECL));
-        addChild(outputNode->children[2]->children[0], maketreeWithVal(TYPESPECIFIER, arg_type));
-        addChild(outputNode->children[2]->children[0], maketreeWithVal(IDENTIFIER, varpos));
+        add_child(outputNode->children[2], make_tree(FORMALDECL));
+        add_child(outputNode->children[2]->children[0], make_tree_with_val(TYPESPECIFIER, arg_type));
+        add_child(outputNode->children[2]->children[0], make_tree_with_val(IDENTIFIER, varpos));
     }
     
     strTable[varpos].treeptr = outputNode->children[2]->children[0];

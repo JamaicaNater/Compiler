@@ -77,7 +77,7 @@ int num_ifs = 0;
 int num_whiles = 0;
 
 /* builds sub tree with zeor children  */
-tree *maketree(int kind) {
+tree *make_tree(int kind) {
     struct treenode *node = (struct treenode *)malloc(sizeof(tree));
     node->parent = NULL;
 
@@ -88,7 +88,7 @@ tree *maketree(int kind) {
 }
 
 /* builds sub tree with leaf node. Leaf nodes typically hold a value. */
-tree *maketreeWithVal(int kind, int val) {
+tree *make_tree_with_val(int kind, int val) {
     struct treenode *node = (struct treenode *)malloc(sizeof(tree));
     node->parent = NULL;
 
@@ -100,7 +100,7 @@ tree *maketreeWithVal(int kind, int val) {
 }
 
 /* assigns the subtree rooted at 'child' as a child of the subtree rooted at 'parent'. Also assigns the 'parent' node as the 'child->parent'. */
-void addChild(tree *parent, tree *child) {
+void add_child(tree *parent, tree *child) {
     if (parent->num_children + 1 > 12){
         printf("ERROR: max children exceeded");
         return;
@@ -112,7 +112,7 @@ void addChild(tree *parent, tree *child) {
 }
 
 // prints the ast recursively starting from the root of the ast.
-void printAst(tree *node, int nestLevel){
+void print_ast(tree *node, int nestLevel){
    
    	int i, j,value;
    
@@ -165,7 +165,7 @@ void printAst(tree *node, int nestLevel){
         for (j = 0; j < nestLevel; j++){
             printf("  ");
         }
-        printAst (node->children[i], nestLevel + 1);
+        print_ast (node->children[i], nestLevel + 1);
     	
     }
 }
@@ -374,14 +374,14 @@ void assemble(tree * node, int * reg_no) {
                 yyerror("Invalid number of return values\n");
             }
 
-            fprintf(fileptr, "#Return\n", mempos);
+            fprintf(fileptr, "#Return\n");
             if (num_vals) {
                 mempos = get_and_update_mempos(return_vals[0]->val);
                 fprintf(fileptr, "\tLW $v0, %d($fp)\n # Save Return value", mempos);
             }
         
             emit_post_instructions();
-            fprintf(fileptr, "\tjr $ra\n", mempos);
+            fprintf(fileptr, "\tjr $ra\n");
             break;
 		default:
 			break;
@@ -535,7 +535,7 @@ int asm_expr(tree * node, int * dest_reg_no) {
                     break;
                 case NEQ:
                     fprintf(fileptr, "\tSEQ $t8, %s, %s \n", reg_names[left_reg], reg_names[right_reg]);
-                    fprintf(fileptr, "\tSEQ %s, $t8, $zero \n", reg_names[return_reg], reg_names[left_reg], reg_names[right_reg]);
+                    fprintf(fileptr, "\tSEQ %s, $t8, $zero \n", reg_names[return_reg]);
                     break;
             }
             //Retire registers

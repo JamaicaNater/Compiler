@@ -9,7 +9,7 @@ extern int yyparse();
 extern FILE* yyin;
 extern tree * ast;
 
-void printhelp() {
+void print_help() {
     printf("Usage: mcc [--ast] [--sym] [-h|--help] FILE\n");
     printf("\t--ast:\t\tPrint a textual representation of the constructed "
             "abstract syntax tree.\n");
@@ -31,14 +31,14 @@ int main(int argc, char *argv[]) {
     // Skip first arg (program name), then check all but last for options.
     for (int i = 1; i < argc - 1; i++) {
         if (strcmp(argv[i], "-h") ==0 || strcmp(argv[i], "--help") == 0) {
-            printhelp();
+            print_help();
             return 0;
         } else if (strcmp(argv[i], "--ast") == 0) {
             p_ast = 1;
         } else if (strcmp(argv[i], "--sym") == 0) {
             p_symtab = 1;
         } else {
-            printhelp();
+            print_help();
             return 0;
         }
     }
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     if (!yyparse()) {
         if (p_ast) {
             printf("PRINTING TREE TABLE:\n");
-            printAst(ast, 1);
+            print_ast(ast, 1);
         }
 
         if (p_symtab) {

@@ -32,16 +32,16 @@ struct treenode {
 };
 
 /* builds sub tree with zeor children  */
-tree *maketree(int kind);
+tree *make_tree(int kind);
 
 /* builds sub tree with leaf node. Leaf nodes typically hold a value. */
-tree *maketreeWithVal(int kind, int val);
+tree *make_tree_with_val(int kind, int val);
 
 /* assigns the subtree rooted at 'child' as a child of the subtree rooted at 'parent'. Also assigns the 'parent' node as the 'child->parent'. */
-void addChild(tree *parent, tree *child);
+void add_child(tree *parent, tree *child);
 
 // prints the ast recursively starting from the root of the ast. 
-void printAst(tree *root, int nestLevel);
+void print_ast(tree *root, int nestLevel);
 
 void assemble(tree * node, int * reg_no);
 

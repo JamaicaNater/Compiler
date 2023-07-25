@@ -4,6 +4,8 @@
 # Yacc + Lex output
 lex.yy.c 
 y.tab
+mcc
+y.output
 
 # Executables
 *.exe
