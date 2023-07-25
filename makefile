@@ -42,7 +42,7 @@ clean:
 	@rm -f *.asm
 
 test: obj/mcc
-	@python ./test/testParser.py
+	@python3 test/test_runner.py
 
 
 CHECK_INPUT_FILE := $(if $(INPUT_FILE),$(INPUT_FILE),test/cases/asmTest2.mC)

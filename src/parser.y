@@ -452,7 +452,7 @@ var 		: ID
                     node = strTable[index].treeptr;
 
                     if (!is_array(node)){
-                        yyerror("Non-array identifier used as an array");
+                        yyerror("Non-array identifier used as an array.");
                     }
                 }
 

@@ -48,7 +48,6 @@ int main(int argc, char *argv[]) {
     output_file_name = malloc(strlen(argv[argc - 1]) + 1);
     strcpy(output_file_name, argv[argc - 1]);
     yyin = fopen(argv[argc - 2], "r");
-    printf("%s", argv[argc - 2]);
     if (!yyin) {
         printf("error: unable to read source file %s\n", argv[argc-1]);
         return -1;
