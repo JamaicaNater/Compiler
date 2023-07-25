@@ -59,7 +59,7 @@ compile: obj/mcc
 	./obj/mcc $(CHECK_INPUT_FILE) $(CHECK_OUTPUT_FILE)
 
 
-run-code:
+execute:
 	@echo "Checking for OUTPUT_FILE..."
 	@if [ -z "$(OUTPUT_FILE)" ]; then \
 		echo "OUTPUT_FILE not set, defaulting to 'asm.asm'"; \

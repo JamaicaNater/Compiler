@@ -3,7 +3,8 @@
 
 # Yacc + Lex output
 lex.yy.c 
-y.tab
+y.tab.c
+y.tab.h
 mcc
 y.output
 
